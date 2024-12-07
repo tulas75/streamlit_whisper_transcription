@@ -27,7 +27,7 @@ Follow these steps to install and run the application:
 
 3. Create a .env file in the project's root directory and add your OpenAI API key:
 
-         OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+         DEEPINFRA_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ## Usage
 ### Local Development
