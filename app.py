@@ -3,6 +3,7 @@ import sys
 import datetime
 import openai
 import dotenv
+import requests
 import streamlit as st
 
 from audio_recorder_streamlit import audio_recorder
@@ -20,14 +21,13 @@ DEEPINFRA_API_KEY = os.environ['DEEPINFRA_API_KEY']
 #    return transcript
 
 def transcribe(audio_file):
-    audio = audio_file 
     # Prepare the request
     url = f'https://api.deepinfra.com/v1/inference/{WHISPER_MODEL}'
     headers = {
         "Authorization": f"bearer {DEEPINFRA_API_KEY}"
     }
     files = {
-        'audio': open(audio, 'rb'),
+        'audio': audio_file,
         'response_format': (None, 'text')
     }
 
@@ -35,8 +35,8 @@ def transcribe(audio_file):
     response = requests.post(url, headers=headers, files=files)
 
     if response.status_code == 200:
-        result = response.text()
-        return transcript 
+        result = response.text
+        return {"text": result}
     else:
         print(f"Error: {response.status_code}")
         print(response.text)
