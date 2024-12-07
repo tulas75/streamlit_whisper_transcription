@@ -9,12 +9,38 @@ from audio_recorder_streamlit import audio_recorder
 
 # import API key from .env file
 dotenv.load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+#openai.api_key = os.getenv("OPENAI_API_KEY")
 
+WHISPER_MODEL = "openai/whisper-large-v3"
+DEEPINFRA_API_KEY = os.environ['DEEPINFRA_API_KEY']
+
+
+#def transcribe(audio_file):
+#    transcript = openai.Audio.transcribe("whisper-1", audio_file)
+#    return transcript
 
 def transcribe(audio_file):
-    transcript = openai.Audio.transcribe("whisper-1", audio_file)
-    return transcript
+    audio = audio_file 
+    # Prepare the request
+    url = f'https://api.deepinfra.com/v1/inference/{WHISPER_MODEL}'
+    headers = {
+        "Authorization": f"bearer {DEEPINFRA_API_KEY}"
+    }
+    files = {
+        'audio': open(audio, 'rb'),
+        'response_format': (None, 'text')
+    }
+
+    # Send the request
+    response = requests.post(url, headers=headers, files=files)
+
+    if response.status_code == 200:
+        result = response.text()
+        return transcript 
+    else:
+        print(f"Error: {response.status_code}")
+        print(response.text)
+        return None
 
 
 def save_audio_file(audio_bytes, file_extension):
